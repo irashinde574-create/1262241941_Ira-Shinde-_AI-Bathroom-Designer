@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kohler Bathroom Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="{{ url_for('static', filename='vendor/three.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/OrbitControls.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/GLTFLoader.js') }}"></script>
+</head>
+<body>
+
+<div class="studio">
+
+  <aside class="rail">
+    <div class="rail-header">
+      <p class="eyebrow">Kohler</p>
+      <h1>Bathroom Studio</h1>
+      <p class="lede">Tell us the space, the budget, and the feeling you want. We'll put together a bundle that fits all three.</p>
+    </div>
+
+    <form id="design-form" class="spec-sheet">
+      <div class="field-row">
+        <label for="room_width_ft">Room width</label>
+        <div class="input-unit">
+          <input type="number" id="room_width_ft" name="room_width_ft" min="1" step="0.5" value="10" required>
+          <span class="unit">ft</span>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label for="room_depth_ft">Room depth</label>
+        <div class="input-unit">
+          <input type="number" id="room_depth_ft" name="room_depth_ft" min="1" step="0.5" value="7" required>
+          <span class="unit">ft</span>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label for="budget_inr">Budget</label>
+        <div class="input-unit">
+          <span class="unit unit-prefix">₹</span>
+          <input type="number" id="budget_inr" name="budget_inr" min="1000" step="1" value="80000" required>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label for="style">Style</label>
+        <select id="style" name="style" required>
+          <option value="Modern">Modern</option>
+          <option value="Classic Luxury">Classic Luxury</option>
+          <option value="Japanese Zen">Japanese Zen</option>
+        </select>
+      </div>
+
+      <button type="submit" id="generate-btn">Generate design</button>
+    </form>
+
+    <p class="rail-footnote">Every bundle is checked to fit your room's actual dimensions and stay within budget before any styling is applied.</p>
+  </aside>
+
+  <main class="canvas">
+    <div id="empty-state" class="empty-state">
+      <p class="empty-kicker">Nothing generated yet</p>
+      <p class="empty-body">Fill in the room details on the left and generate a design. Your floorplan, product bundle, and the reasoning behind each choice will appear here.</p>
+    </div>
+
+    <div id="loading-state" class="loading-state" hidden>
+      <p>Fitting products to your space, then reasoning through the styling&hellip;</p>
+    </div>
+
+    <div id="notice-banner" class="notice-banner" hidden></div>
+
+    <div id="result" class="result" hidden>
+      <div class="floorplan-panel">
+        <div class="view-toggle">
+          <button type="button" class="view-btn active" id="view-2d-btn">2D Floorplan</button>
+          <button type="button" class="view-btn" id="view-3d-btn">3D View</button>
+        </div>
+        <div id="floorplan-panel-2d"></div>
+        <div id="floorplan-panel-3d" hidden>
+          <div id="scene-3d-container"></div>
+          <p class="scene-3d-hint">Drag to rotate &middot; scroll to zoom</p>
+        </div>
+      </div>
+
+      <div class="bundle-panel">
+        <h2>Selected bundle</h2>
+        <table class="bundle-table" id="bundle-table">
+          <tbody></tbody>
+        </table>
+        <div class="total-row">
+          <span>Total</span>
+          <span id="total-price"></span>
+        </div>
+      </div>
+
+      <div class="rationale-panel">
+        <p class="rationale-label">Why this bundle</p>
+        <p id="rationale-text"></p>
+      </div>
+
+      <div class="options-panel">
+        <h2>Other options considered</h2>
+        <p class="options-lede">Every item below already fits your room and was checked against your budget — the highlighted row is what's currently selected.</p>
+        <div id="options-container"></div>
+      </div>
+
+      <div class="refine-panel">
+        <p class="rationale-label">Want to change something?</p>
+        <form id="refine-form" class="refine-form">
+          <input type="text" id="refine-input" placeholder="e.g. show me a cheaper vanity, or a different mirror" autocomplete="off">
+          <button type="submit" id="refine-btn">Update design</button>
+        </form>
+        <p id="refine-feedback" class="refine-feedback" hidden></p>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
